@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Models\Season;
 use App\Http\Requests\ProductRequest;
@@ -40,29 +41,32 @@ class ProductController extends Controller
 
     public function create()
     {
-        $seasons = Season::orderBy('id', 'asc')->get();
+        $seasons = Season::all();
         return view('create', compact('seasons'));
     }
 
     public function store(ProductRequest $request)
     {
-        $imagePathForDb = null;
-        if ($request->hasFile('image')) {
-            $stored = $request->file('image')->store('fruits-img', 'public');
-            $imagePathForDb = 'storage/' . $stored; // asset($product->image) で表示できる形
-        }
+        $validated = $request->validated();
 
-        $product = new \App\Models\Product();
-        $product->name        = $request->input('name');
-        $product->price       = $request->input('price');
-        $product->description = $request->input('description'); // カラムが無ければ削除
-        if ($imagePathForDb) $product->image = $imagePathForDb;
-        $product->save();
+        $imagePath = $validated['image']->store('public/fruits-img');
+        $imageName = basename($imagePath);
 
-        if ($request->filled('season_ids')) {
-            $product->seasons()->sync($request->input('season_ids'));
-        }
+        $product = Product::create([
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'image' => $imageName,
+            'description' => $validated['description'],
+        ]);
 
-        return redirect()->route('products.search')->with('success', '商品を登録しました。');
+        $product->seasons()->attach($validated['seasons']);
+
+        return redirect('/products');
+    }
+
+    public function edit(Product $product)
+    {
+        $seasons = Season::all();
+        return view('edit', compact('product', 'seasons'));
     }
 }

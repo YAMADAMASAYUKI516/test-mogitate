@@ -48,11 +48,11 @@
 
             <section class="product-list">
                 @forelse ($products as $product)
-                    <a href="{{ url('/products/'.$product->id) }}" class="product-card">
+                    <a class="product-card" href="{{ url('/products/' . $product->id . '/update') }}">
                         <div class="product-card__image-wrap">
                             <img
                                 class="product-card__image"
-                                src="{{ asset($product->image) }}"
+                                src="{{ asset('storage/fruits-img/' . basename($product->image)) }}"
                                 alt="{{ $product->name }}"
                                 onerror="this.src='{{ asset('images/noimage.png') }}'">
                         </div>

@@ -31,17 +31,10 @@
     background-color: #DF9425;
 }
 
-/* .content-body {
-    display: flex;
-    padding: 0 40px;
-    gap: 30px;
-} */
-
 .content-body {
     display: grid;
     padding: 0 40px;
     grid-template-columns: 280px 1fr;
-    /* 左固定・右可変 */
     gap: 30px;
     align-items: start;
 }

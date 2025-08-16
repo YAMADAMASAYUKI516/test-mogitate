@@ -20,4 +20,7 @@ Route::get('/products/search', [ProductController::class, 'index'])->name('produ
 
 // 登録画面・登録処理
 Route::get('/products/register', [ProductController::class, 'create'])->name('products.register');
-Route::post('/products/register', [ProductController::class, 'store'])->name('products.store');
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+// 編集画面・削除処理
+Route::get('/products/{product}/update', [ProductController::class, 'edit'])->name('products.edit');
