@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'jsMath-cmti10';
+    src: url('/fonts/jsMath-cmti10/jsMath-cmti10.ttf.woff') format('woff'),
+        url('/fonts/jsMath-cmti10/jsMath-cmti10.ttf.svg#jsMath-cmti10') format('svg'),
+        url('/fonts/jsMath-cmti10/jsMath-cmti10.ttf.eot'),
+        url('/fonts/jsMath-cmti10/jsMath-cmti10.ttf.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.inika-regular {
+    font-family: "Inika", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.inika-bold {
+    font-family: "Inika", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+}
+
+.header {
+    position: relative;
+    padding: 10px 20px;
+}
+
+.header__logo {
+    font-family: 'jsMath-cmti10';
+    font-size: 30px;
+    color: #F5C800;
+    text-decoration: none;
+}
+
+main {
+    background-color: #F8F8F8;
+}
