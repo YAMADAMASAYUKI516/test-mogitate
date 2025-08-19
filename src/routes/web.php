@@ -22,5 +22,7 @@ Route::get('/products/search', [ProductController::class, 'index'])->name('produ
 Route::get('/products/register', [ProductController::class, 'create'])->name('products.register');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 
-// 編集画面・削除処理
+// 編集画面・更新・削除処理
 Route::get('/products/{product}/update', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/products/{product}/update', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{product}/delete', [ProductController::class, 'destroy']);

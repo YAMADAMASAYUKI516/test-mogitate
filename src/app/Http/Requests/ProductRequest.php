@@ -23,13 +23,28 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'price' => 'required | numeric | between:0,10000',
-            'seasons' => 'required | array',
-            'description' => 'required | max:120',
-            'image' => 'required | mimes:png,jpeg,.jpg',
-        ];
+        if ($this->isMethod('POST')) {
+            // 新規登録用ルール
+            return [
+                'name' => 'required',
+                'price' => 'required | numeric | between:0,10000',
+                'seasons' => 'required | array',
+                'description' => 'required | max:120',
+                'image' => 'required | mimes:png,jpeg',
+            ];
+        } elseif ($this->isMethod('PUT')) {
+            // 更新用ルール（画像は任意）
+            return [
+                'name' => 'required',
+                'price' => 'required | numeric | between:0,10000',
+                'seasons' => 'required | array',
+                'description' => 'required | max:120',
+                'image' => 'nullable | mimes:png,jpeg',
+            ];
+        }
+
+        // 万が一他のHTTPメソッドの場合
+        return [];
     }
 
     public function messages()

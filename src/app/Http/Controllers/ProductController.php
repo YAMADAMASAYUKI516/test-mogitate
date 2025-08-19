@@ -49,13 +49,16 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
 
-        $imagePath = $validated['image']->store('public/fruits-img');
-        $imageName = basename($imagePath);
+        $image = $validated['image'];
+        $timestamp = now()->format('YmdHis');
+        $originalName = $image->getClientOriginalName();
+        $fileName = $timestamp . '_' . $originalName;
+        $image->storeAs('public/fruits-img', $fileName);
 
         $product = Product::create([
             'name' => $validated['name'],
             'price' => $validated['price'],
-            'image' => $imageName,
+            'image' => $fileName,
             'description' => $validated['description'],
         ]);
 
@@ -68,5 +71,41 @@ class ProductController extends Controller
     {
         $seasons = Season::all();
         return view('edit', compact('product', 'seasons'));
+    }
+
+    public function update(ProductRequest $request, Product $product)
+    {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $timestamp = now()->format('YmdHis');
+            $originalName = $image->getClientOriginalName();
+            $fileName = $timestamp . '_' . $originalName;
+            $image->storeAs('public/fruits-img', $fileName);
+        } else {
+            $fileName = basename($request->input('saved_image'));
+        }
+
+        $product->update([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'image' => $fileName,
+        ]);
+
+        $product->seasons()->sync($request->input('seasons'));
+
+        return redirect('/products');
+    }
+
+    public function destroy(Product $product)
+    {
+        if ($product->image && Storage::exists('public/fruits-img/' . $product->image)) {
+            Storage::delete('public/fruits-img/' . $product->image);
+        }
+
+        $product->seasons()->detach();
+        $product->delete();
+
+        return redirect('/products');
     }
 }
